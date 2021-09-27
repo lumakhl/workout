@@ -12,7 +12,7 @@ const App = (): ReactElement => {
   return (
     <Router>
       <div className='App'>
-        <Header></Header>
+        <Header />
       </div>
 
       <Switch>
