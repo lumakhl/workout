@@ -1,0 +1,26 @@
+.c-pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-pagination__navs {
+  display: flex;
+  flex-direction: row;
+}
+
+.c-pagination__item {
+  margin-left: .35rem;
+  color: gray;
+  text-decoration: none;
+}
+
+.c-pagination__current {
+  font-weight: bold;
+  font-size: 1rem;
+  color: darkslategray;
+}
+
+.c-pagination__total {
+  color: gray;
+}

@@ -1,0 +1,22 @@
+.c-header {
+  display: flex;
+  height: 4rem;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: bisque;
+}
+
+.c-header-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: .5rem;
+}
+
+.c-header__title {
+  margin-left: .5rem;
+  margin-top: .35rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #736572;
+}

@@ -1,0 +1,37 @@
+.c-workout-detail-page {
+  display: flex;
+  padding: 0 10rem;
+  flex-direction: column;
+}
+
+.c-workout-detail-page__name {
+  align-self: flex-start;
+  color: darkslategray;
+}
+
+.c-workout-detail-page__basic-info {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.c-workout-detail-page__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.c-workout-detail-page__text {
+  font-size: 1.25rem;
+  color: darkslategray;
+}
+
+.c-workout-detail-page__info-title {
+  font-size: 1rem;
+  color: gray;
+}
+
+.c-workout-detail-page__description {
+  margin: .75rem 0;
+  color: gray;
+}

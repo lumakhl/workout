@@ -1,0 +1,16 @@
+{
+  "name": "workouts-server",
+  "version": "1.0.0",
+  "description": "service to get workouts",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "lumakhl",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "faker": "^5.5.3"
+  }
+}
