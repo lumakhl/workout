@@ -1,0 +1,22 @@
+.c-selection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.c-selection__title {
+  font-size: 1rem;
+  color: gray;
+  margin-right: .25rem;
+}
+
+.basic-multi-select {
+  width: 25rem;
+}
+
+@media screen and (max-width: 1024px) {
+  .c-selection {
+    margin-bottom: .25rem;
+  }
+}
