@@ -1,18 +1,18 @@
-const faker = require('faker');
-const fs = require('fs');
+import faker from 'faker';
+import * as fs from 'fs';
+import { Category } from './model/category';
+import { Workout } from './model/workout';
 
 const DB_NAME = 'workouts_db.txt';
 const DATA_SIZE = 1000;
 
-const CATEGORIES = ['C1', 'C2', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7'];
-
-function createDB() {
-  const workouts = [];
+function createDB(): Workout[] {
+  const workouts:Workout[] = [];
   for(let i = 0; DATA_SIZE > i; i++) {
-    const workout = {
+    const workout: Workout = {
       name: faker.lorem.word(),
       description: faker.lorem.paragraphs(2),
-      category: faker.random.arrayElement(CATEGORIES),
+      category: faker.random.arrayElement(Object.getOwnPropertyNames(Category)) as Category,
       startDate: faker.date.future(),
       image: faker.image.sports(1000, 400),
       id: faker.datatype.uuid()
@@ -24,7 +24,7 @@ function createDB() {
   return workouts;
 }
 
-function loadDB() {
+function loadDB(): Workout[] {
   if(!fs.existsSync(DB_NAME)) {
     const workouts = createDB();
 
@@ -33,10 +33,10 @@ function loadDB() {
     return workouts;
   }
 
-  const workouts = fs.readFileSync(DB_NAME);
+  const workouts = fs.readFileSync(DB_NAME).toString();
   return JSON.parse(workouts);
 }
 
-module.exports = {
+export {
   loadDB
 }

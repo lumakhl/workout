@@ -1,33 +1,35 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 
-const { loadDB } = require('./database');
-const { isSameMonth } = require('./dateUtils');
+import { Workout } from './model/workout';
+import { loadDB } from './database';
+import { isSameMonth } from './dateUtils';
+
 
 const workouts = loadDB();
 
 const app = express();
 
 app.use(cors());
-app.options('*', cors());
 
 const PORT = 5000;
-
 const PAGE_SIZE = 20;
 
-app.get('/workouts', (req, res) => {
+app.get('/workouts', (req, res): void => {
   const { page, categories, month, limit = PAGE_SIZE } = req.query;
 
-  const categoriesList = categories.split(',');
+  const categoriesList = String(categories).split(',');
   const limitValue = Number(limit);
+  const pageValue = Number(page);
+  const monthValue = String(month);
 
   const workoutFiltered = workouts.filter(
-    (workout) =>
+    (workout: Workout) =>
       (!categories || categoriesList.includes(workout.category)) &&
-      (!month || isSameMonth(new Date(month), new Date(workout.startDate)))
+      (!month || isSameMonth(new Date(monthValue), new Date(workout.startDate)))
   );
 
-  const pageStart = page * limitValue;
+  const pageStart = pageValue * limitValue;
   const pageEnd = Math.min(pageStart + limitValue, workoutFiltered.length);
 
   const result = {
@@ -38,9 +40,9 @@ app.get('/workouts', (req, res) => {
   res.send(result);
 });
 
-app.get('/workout/:id', (req, res) => {
+app.get('/workout/:id', (req, res): void => {
   const { id } = req.params;
-  const workout = workouts.find((workout) => workout.id === id);
+  const workout = workouts.find((workout: Workout) => workout.id === id);
   res.send(workout);
 });
 
