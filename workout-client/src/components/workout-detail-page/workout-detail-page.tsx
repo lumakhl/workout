@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { WorkoutDetail } from '../../model';
 import { getWorkoutDetail } from '../../service';
@@ -12,6 +12,7 @@ const DATE_FORMAT = 'LLL';
 
 function WorkoutDetailPage(): ReactElement {
   const { id } = useParams<{ id: string }>();
+  const history = useHistory();
   const [workout, setWorkout] = useState<WorkoutDetail | null>(null);
 
   useEffect((): void => {
@@ -26,6 +27,7 @@ function WorkoutDetailPage(): ReactElement {
 
   return (
     <div className='c-workout-detail-page'>
+      <span onClick={() => history.goBack()}>back to list</span>
       <h2 className='c-workout-detail-page__name'>{workout.name}</h2>
       <img src={workout.image}></img>
 

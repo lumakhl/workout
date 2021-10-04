@@ -1,29 +1,28 @@
 import moment from 'moment';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Categories } from '../../../../model';
+import { WorkoutNavigationContext } from '../../../../contexts/workout-navigation-context';
 import Selection, { OptionType } from '../selection/selection';
 
 import './topbar.css';
 
 interface TopbarProps {
-  onChange: (filters: FiltersSelected) => void;
   title: string;
 }
 
-export interface FiltersSelected {
+export interface FiltersOptions {
   selectedCategories: string[];
   selectedMonth: string;
+  page: number;
 }
 
+const FILTER_CATEGORY_TITLE = 'Categories';
+const FILTER_MONTH_TITLE = 'Start Date';
+
 function Topbar(props: TopbarProps): ReactElement {
-  const { onChange, title} = props;
+  const { title } = props;
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedMonth, setSelectedMonth] = useState('');
-
-  useEffect((): void => {
-    onChange({selectedCategories, selectedMonth});
-  }, [selectedCategories, selectedMonth]);
+  const context = useContext(WorkoutNavigationContext.context);
 
   const categories = Object.entries(Categories).map(([key, value]) => ({
     value: key,
@@ -41,18 +40,35 @@ function Topbar(props: TopbarProps): ReactElement {
   };
 
   const onCategoriesSelectedChange = (value: string[]): void => {
-      setSelectedCategories(value);
+    context.addOrUpdateFilterOptions({
+      ...context.getFilterOptions(),
+      selectedCategories: value,
+      page: 0,
+    });
   };
 
   const onMonthSelectedChange = (value: string): void => {
-    setSelectedMonth(value);
+    context.addOrUpdateFilterOptions({
+      ...context.getFilterOptions(),
+      selectedMonth: value,
+      page: 0,
+    });
   };
 
   return (
     <div className='c-topbar'>
       <span className='c-topbar__title'>{title}</span>
-      <Selection multiselect name='Category' options={categories} onChangeMulti={onCategoriesSelectedChange}/>
-      <Selection name='Start Date' options={getMonths()} onChangeSingle={onMonthSelectedChange} />
+      <Selection
+        multiselect
+        name={FILTER_CATEGORY_TITLE}
+        options={categories}
+        onChangeMulti={onCategoriesSelectedChange}
+      />
+      <Selection
+        name={FILTER_MONTH_TITLE}
+        options={getMonths()}
+        onChangeSingle={onMonthSelectedChange}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import React, { Fragment, ReactElement } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment, ReactElement, useContext } from 'react';
 import { MAX_PAGE_SIZE } from '../../constants';
+import {  WorkoutNavigationContext } from '../../contexts/workout-navigation-context';
 
 import './pagination.css';
 
@@ -11,6 +11,12 @@ interface PaginationProps {
 
 function Pagination(props: PaginationProps): ReactElement {
   const { page, total } = props;
+
+  const context = useContext(WorkoutNavigationContext.context);
+
+  const onNavigate = (page: number): void => {
+    context.addOrUpdatePage(page);
+  }
 
   const MAX_PAGES = Math.floor(total / MAX_PAGE_SIZE) - 1;
   const partial = MAX_PAGE_SIZE * (page + 1);
@@ -23,25 +29,25 @@ function Pagination(props: PaginationProps): ReactElement {
       <div className='c-pagination__navs'>
         {shouldRenderPrevious ? (
           <Fragment>
-            <Link className='c-pagination__item' to={`/${page - 1}`}>
+            <button className='c-pagination__item' onClick={() => onNavigate(page - 1)}>
               Previous
-            </Link>
-            <Link className='c-pagination__item' to={`/${page - 1}`}>
+            </button>
+            <button className='c-pagination__item' onClick={() => onNavigate(page - 1)}>
               {page - 1}
-            </Link>
+            </button>
           </Fragment>
         ) : null}
 
-        <span className='c-pagination__item c-pagination__current'>{page}</span>
+        <button className='c-pagination__item c-pagination__current'>{page}</button>
 
         {shouldRenderNext ? (
           <Fragment>
-            <Link className='c-pagination__item' to={`/${page + 1}`}>
+            <button className='c-pagination__item' onClick={() => onNavigate(page + 1)}>
               {page + 1}
-            </Link>
-            <Link className='c-pagination__item' to={`/${page + 1}`}>
+            </button>
+            <button className='c-pagination__item' onClick={() => onNavigate(page + 1)}>
               Next
-            </Link>
+            </button>
           </Fragment>
         ) : null}
       </div>

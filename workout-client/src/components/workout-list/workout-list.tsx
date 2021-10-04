@@ -1,6 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
 import { MAX_PAGE_SIZE } from '../../constants';
 
 import { Workouts } from '../../model';
@@ -9,44 +8,53 @@ import { getWorkouts } from '../../service';
 import Pagination from '../pagination/pagination';
 import WorkoutItem from '../workout-item/workout-item';
 
-import Topbar, { FiltersSelected } from './components/topbar/topbar';
+import Topbar, { FiltersOptions } from './components/topbar/topbar';
+import { WorkoutNavigationContext } from '../../contexts/workout-navigation-context';
 
 import './workout-list.css';
 
 const TOPBAR_TITLE = 'Filters';
 
 function WorkoutList(): ReactElement {
-  const { page } = useParams<{ page?: string }>();
+  const context = useContext(WorkoutNavigationContext.context);
+  // const [context] = useState<WorkoutListContext>(new WorkoutListContext());
+
+  const [filterOptions, setFilterOptions] = useState<FiltersOptions>();
   const [workouts, setWorkouts] = useState<Workouts>({
     total: 0,
     workouts: [],
   });
 
-  const currentPage = Number(page) || 0;
+  const currentPage = filterOptions?.page || 0;
 
-  useEffect((): void => {
-    updateWorkouts();
+  useEffect(() => {
+    const unlistenFilterOptions = context.addFilterOptionsListener(() => {
+      setFilterOptions(context.getFilterOptions());
+    });
+
+    setFilterOptions(context.getFilterOptions());
+
+    return () => {
+      unlistenFilterOptions();
+    };
   }, []);
 
   useEffect((): void => {
     updateWorkouts();
-  }, [page]);
+  }, [filterOptions]);
 
   const updateWorkouts = (): void => {
+    console.log(filterOptions);
     getWorkouts(currentPage)
       .then((data) => setWorkouts(data))
       .catch();
   };
 
-  const onFilterChange = (filterOptions: FiltersSelected): void => {
-    console.log(filterOptions);
-  }
-
   const shouldRenderPagination = workouts.total >= MAX_PAGE_SIZE;
 
   return (
     <div className='c-workout-list'>
-      <Topbar onChange={onFilterChange} title={TOPBAR_TITLE}/>
+      <Topbar title={TOPBAR_TITLE} />
       {workouts.workouts.map((workout) => (
         <WorkoutItem key={workout.id} workout={workout} />
       ))}
