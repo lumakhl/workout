@@ -19,6 +19,7 @@ app.get('/workouts', (req, res) => {
   const { page, categories, month, limit = PAGE_SIZE } = req.query;
 
   const categoriesList = categories.split(',');
+  const limitValue = Number(limit);
 
   const workoutFiltered = workouts.filter(
     (workout) =>
@@ -26,8 +27,8 @@ app.get('/workouts', (req, res) => {
       (!month || isSameMonth(new Date(month), new Date(workout.startDate)))
   );
 
-  const pageStart = page * limit;
-  const pageEnd = Math.min(pageStart + limit, workoutFiltered.length);
+  const pageStart = page * limitValue;
+  const pageEnd = Math.min(pageStart + limitValue, workoutFiltered.length);
 
   const result = {
     workouts: workoutFiltered.slice(pageStart, pageEnd),

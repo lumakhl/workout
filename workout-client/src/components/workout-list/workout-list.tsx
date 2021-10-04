@@ -26,6 +26,7 @@ function WorkoutList(): ReactElement {
     total: 0,
     workouts: [],
   });
+  const [loading, setLoading] = useState<boolean>();
 
   const currentPage = filterOptions?.page || 0;
 
@@ -40,27 +41,37 @@ function WorkoutList(): ReactElement {
   }, []);
 
   useEffect((): void => {
+    setLoading(true);
     updateWorkouts();
   }, [filterOptions]);
 
   const updateWorkouts = (): void => {
     getWorkouts(filterOptions)
-      .then((data) => setWorkouts(data))
-      .catch();
+      .then((data) => {
+        setWorkouts(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   };
 
-  const shouldRenderPagination = workouts.total >= MAX_PAGE_SIZE;
+  const shouldRenderPagination = !loading && workouts.total >= MAX_PAGE_SIZE;
+
+  const renderContent = (): ReactElement[] | ReactElement => {
+    if (workouts.total) {
+      return workouts.workouts.map((workout) => (
+        <WorkoutItem key={workout.id} workout={workout} />
+      ));
+    }
+
+    return (
+      <span className='c-workout-list__not-found'>{NOT_FOUND_MESSAGE}</span>
+    );
+  };
 
   return (
     <div className='c-workout-list'>
       <Topbar title={TOPBAR_TITLE} />
-      {workouts.total ? (
-        workouts.workouts.map((workout) => (
-          <WorkoutItem key={workout.id} workout={workout} />
-        ))
-      ) : (
-        <span className='c-workout-list__not-found'>{NOT_FOUND_MESSAGE}</span>
-      )}
+      {loading ? <span>Loading...</span> : renderContent()}
       {shouldRenderPagination ? (
         <Pagination page={currentPage} total={workouts.total} />
       ) : null}

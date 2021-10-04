@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { FiltersOptions } from '../components/workout-list/components/topbar/topbar';
+import { MAX_PAGE_SIZE } from '../constants';
 import { WorkoutDetail, Workouts } from '../model';
 
 const DEV_SERVER = 'http://localhost:5000';
@@ -11,6 +12,7 @@ const getWorkouts = async (
     ['page', String(filterOptions.page)],
     ['categories', filterOptions.selectedCategories.join(',')],
     ['month', filterOptions.selectedMonth],
+    ['limit', String(MAX_PAGE_SIZE)]
   ]);
   const workouts = await axios.get<Workouts>(
     `${DEV_SERVER}/workouts`,

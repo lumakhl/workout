@@ -33,17 +33,17 @@ function Pagination(props: PaginationProps): ReactElement {
               Previous
             </button>
             <button className='c-pagination__item' onClick={() => onNavigate(page - 1)}>
-              {page - 1}
+              {page}
             </button>
           </Fragment>
         ) : null}
 
-        <button className='c-pagination__item c-pagination__current'>{page}</button>
+        <button className='c-pagination__item c-pagination__current'>{page+1}</button>
 
         {shouldRenderNext ? (
           <Fragment>
             <button className='c-pagination__item' onClick={() => onNavigate(page + 1)}>
-              {page + 1}
+              {page + 2}
             </button>
             <button className='c-pagination__item' onClick={() => onNavigate(page + 1)}>
               Next

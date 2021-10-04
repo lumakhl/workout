@@ -13,7 +13,7 @@ function createDB() {
       name: faker.lorem.word(),
       description: faker.lorem.paragraphs(2),
       category: faker.random.arrayElement(CATEGORIES),
-      startDate: faker.date.soon(),
+      startDate: faker.date.future(),
       image: faker.image.sports(1000, 400),
       id: faker.datatype.uuid()
     };
