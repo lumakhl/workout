@@ -3,3 +3,8 @@
   flex-direction: column;
   align-items: center;
 }
+
+.c-workout-list__not-found {
+  font-size: 1.5rem;
+  color: gray;
+}

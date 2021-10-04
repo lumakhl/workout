@@ -40,3 +40,9 @@
   font-size: .75rem;
   color: gray;
 }
+
+@media screen and (max-width: 1024px) {
+  .c-workout-item {
+    min-width: 300px;
+  }
+}

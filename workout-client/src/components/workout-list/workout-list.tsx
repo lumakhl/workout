@@ -14,12 +14,14 @@ import { WorkoutNavigationContext } from '../../contexts/workout-navigation-cont
 import './workout-list.css';
 
 const TOPBAR_TITLE = 'Filters';
+const NOT_FOUND_MESSAGE = 'No workout was found';
 
 function WorkoutList(): ReactElement {
   const context = useContext(WorkoutNavigationContext.context);
-  // const [context] = useState<WorkoutListContext>(new WorkoutListContext());
 
-  const [filterOptions, setFilterOptions] = useState<FiltersOptions>();
+  const [filterOptions, setFilterOptions] = useState<FiltersOptions>(
+    context.getFilterOptions()
+  );
   const [workouts, setWorkouts] = useState<Workouts>({
     total: 0,
     workouts: [],
@@ -32,8 +34,6 @@ function WorkoutList(): ReactElement {
       setFilterOptions(context.getFilterOptions());
     });
 
-    setFilterOptions(context.getFilterOptions());
-
     return () => {
       unlistenFilterOptions();
     };
@@ -44,8 +44,7 @@ function WorkoutList(): ReactElement {
   }, [filterOptions]);
 
   const updateWorkouts = (): void => {
-    console.log(filterOptions);
-    getWorkouts(currentPage)
+    getWorkouts(filterOptions)
       .then((data) => setWorkouts(data))
       .catch();
   };
@@ -55,9 +54,13 @@ function WorkoutList(): ReactElement {
   return (
     <div className='c-workout-list'>
       <Topbar title={TOPBAR_TITLE} />
-      {workouts.workouts.map((workout) => (
-        <WorkoutItem key={workout.id} workout={workout} />
-      ))}
+      {workouts.total ? (
+        workouts.workouts.map((workout) => (
+          <WorkoutItem key={workout.id} workout={workout} />
+        ))
+      ) : (
+        <span className='c-workout-list__not-found'>{NOT_FOUND_MESSAGE}</span>
+      )}
       {shouldRenderPagination ? (
         <Pagination page={currentPage} total={workouts.total} />
       ) : null}

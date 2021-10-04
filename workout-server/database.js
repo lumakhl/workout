@@ -15,7 +15,7 @@ function createDB() {
       category: faker.random.arrayElement(CATEGORIES),
       startDate: faker.date.soon(),
       image: faker.image.sports(1000, 400),
-      id: faker.random.uuid()
+      id: faker.datatype.uuid()
     };
 
     workouts.push(workout);

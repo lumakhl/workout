@@ -32,11 +32,22 @@ function Topbar(props: TopbarProps): ReactElement {
   const getMonths = (): OptionType[] => {
     const months = [];
     for (let i = 0; i <= 12; i++) {
-      const date = moment().add(i, 'months');
+      const date = moment().add(i, 'months').hour(12).minutes(0).seconds(0).milliseconds(0);
       months.push({ value: date.format(), label: date.format('MMMM') });
     }
 
     return months;
+  };
+
+  const getSelectedCategoriesOptions = (): OptionType[] => {
+    return context.getFilterOptions().selectedCategories.map((category) => ({
+      value: category,
+      label: category,
+    }));
+  };
+
+  const getSelectedMonthOption = (): OptionType | undefined => {
+    return getMonths().find((month: OptionType) => month.value === context.getFilterOptions().selectedMonth);
   };
 
   const onCategoriesSelectedChange = (value: string[]): void => {
@@ -63,11 +74,13 @@ function Topbar(props: TopbarProps): ReactElement {
         name={FILTER_CATEGORY_TITLE}
         options={categories}
         onChangeMulti={onCategoriesSelectedChange}
+        selectedValues={getSelectedCategoriesOptions()}
       />
       <Selection
         name={FILTER_MONTH_TITLE}
         options={getMonths()}
         onChangeSingle={onMonthSelectedChange}
+        selectedValues={getSelectedMonthOption()}
       />
     </div>
   );

@@ -27,7 +27,7 @@ function WorkoutDetailPage(): ReactElement {
 
   return (
     <div className='c-workout-detail-page'>
-      <span onClick={() => history.goBack()}>back to list</span>
+      <span className='c-workout-detai-page__back' onClick={() => history.goBack()}>back to list</span>
       <h2 className='c-workout-detail-page__name'>{workout.name}</h2>
       <img src={workout.image}></img>
 

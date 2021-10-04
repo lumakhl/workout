@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const { loadDB } = require('./database');
+const { isSameMonth } = require('./dateUtils');
 
 const workouts = loadDB();
 
@@ -14,16 +15,24 @@ const PORT = 5000;
 
 const PAGE_SIZE = 20;
 
-app.get('/workouts/:page', (req, res) => {
-  const { page } = req.params;
+app.get('/workouts', (req, res) => {
+  const { page, categories, month, limit = PAGE_SIZE } = req.query;
 
-  const pageStart = page*PAGE_SIZE;
-  const pageEnd = Math.min(pageStart + PAGE_SIZE, workouts.length);
+  const categoriesList = categories.split(',');
+
+  const workoutFiltered = workouts.filter(
+    (workout) =>
+      (!categories || categoriesList.includes(workout.category)) &&
+      (!month || isSameMonth(new Date(month), new Date(workout.startDate)))
+  );
+
+  const pageStart = page * limit;
+  const pageEnd = Math.min(pageStart + limit, workoutFiltered.length);
 
   const result = {
-    workouts: workouts.slice(pageStart, pageEnd),
-    total: workouts.length,
-  }
+    workouts: workoutFiltered.slice(pageStart, pageEnd),
+    total: workoutFiltered.length,
+  };
 
   res.send(result);
 });
@@ -36,6 +45,4 @@ app.get('/workout/:id', (req, res) => {
 
 app.listen(PORT, () => {
   console.log('[server]: is running');
-})
-
-
+});

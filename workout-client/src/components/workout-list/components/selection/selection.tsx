@@ -9,6 +9,7 @@ export interface OptionType {
 }
 
 interface SelectionProps {
+  selectedValues?: OptionType | OptionType[];
   multiselect?: boolean;
   name: string;
   options: OptionType[];
@@ -17,7 +18,7 @@ interface SelectionProps {
 }
 
 function Selection(props: SelectionProps): ReactElement {
-  const { multiselect = false, name, onChangeMulti, onChangeSingle, options } = props;
+  const { multiselect = false, name, onChangeMulti, onChangeSingle, options, selectedValues } = props;
 
   const onChangeSelection = (value: SingleValue<OptionType> | MultiValue<OptionType> ): void => {
     if(Array.isArray(value)) {
@@ -29,7 +30,7 @@ function Selection(props: SelectionProps): ReactElement {
 
     if(onChangeSingle) {
       const option = value as OptionType;
-      onChangeSingle(option.value);
+      onChangeSingle(option?.value || '');
     }
   } 
 
@@ -37,11 +38,13 @@ function Selection(props: SelectionProps): ReactElement {
     <div className="c-selection">
       <span className="c-selection__title">{ name }</span>
       <Select
+        isClearable
         isMulti={multiselect}
         name={name}
         options={options}
         className='basic-multi-select'
         classNamePrefix='select'
+        value={selectedValues}
         onChange={onChangeSelection}
       />
     </div>

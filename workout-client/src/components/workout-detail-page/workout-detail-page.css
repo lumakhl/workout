@@ -4,6 +4,13 @@
   flex-direction: column;
 }
 
+.c-workout-detai-page__back {
+  color: gray;
+  font-size: .85rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
 .c-workout-detail-page__name {
   align-self: flex-start;
   color: darkslategray;
